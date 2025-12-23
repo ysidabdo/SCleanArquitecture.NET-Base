@@ -12,13 +12,15 @@ public class PersonRepositoryBridge : IPersonRepository
     public Person GetPersonById(int id)
     {
         var whereClause = $"Id = {id}";
-        var result = _personTableRepository.GetAllPersonsWhere(whereClause);
+        var rows = _personTableRepository.GetAllPersonsWhere(whereClause);
+        var first = rows.Cast<dynamic>().FirstOrDefault();
+        if (first == null)
+            throw new KeyNotFoundException($"Person with id {id} not found");
 
-       if (result is not Person person)
-        {
-            throw new InvalidOperationException("El resultado no es un Persona");
-        }
-        return person;
+        string firstName = first.FirstName;
+        string lastName = first.LastName;
+        int age = (int)first.Age;
+        return new Person(firstName, lastName, age);
         
     }
 
