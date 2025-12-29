@@ -16,7 +16,7 @@ public class PersonRepositoryBridge : IPersonRepository
         var dbEntity = result.FirstOrDefault();
 
         if (dbEntity is null)
-            throw new KeyNotFoundException($"Person with Id {id} not found");
+            return new("NotFound", "NotFound", 0); // Manejo simple de no encontrado, se puede mejorar según necesidades
       
         return dbEntity.MapToDomainEntity();
         
